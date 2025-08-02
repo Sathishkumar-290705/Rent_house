@@ -14,6 +14,7 @@ const Main_Home = () => {
   };
 
   return (
+
     <div className="main-home">
       {/* ========== Hero Section ========== */}
       <div className="hero-container">
@@ -65,5 +66,6 @@ const Main_Home = () => {
     </div>
   );
 };
+
 
 export default Main_Home;
