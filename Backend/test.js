@@ -38,7 +38,7 @@ app.get('/properties', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch properties' });
   }
 });
-
+  
 // Add a new property
 app.post('/properties', async (req, res) => {
   try {
