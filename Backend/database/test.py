@@ -36,11 +36,8 @@ sample_data = [
         "details": "Near metro station"
     }
 ]
-
-# 💾 Optional: Save to a JSON file (if you want)
-with open("sample_properties.json", "w") as f:
-    json.dump(sample_data, f, indent=4)
-
+with open("sample_properties.json", "r") as f:
+    sample_data = json.load(f)
 # 📥 Insert into MongoDB
 insert_result = collection.insert_many(sample_data)
 print(f"Inserted {len(insert_result.inserted_ids)} properties into MongoDB.")
