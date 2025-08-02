@@ -8,7 +8,8 @@ const Main_Enq = () => {
     email: '',
     phone: '',
     message: '',
-    propertyId: ''
+    propertyId: '',
+    viewingTime: ''
   });
 
   const handleChange = (e) => {
@@ -16,17 +17,31 @@ const Main_Enq = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    alert('Thank you for your enquiry! We will respond within 24 hours.');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: '',
-      propertyId: ''
-    });
+
+    try {
+      const response = await fetch('http://localhost:5000/send-enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, enquiryType })
+      });
+
+      if (!response.ok) throw new Error('Failed to send enquiry');
+
+      alert('Thank you for your enquiry! We will respond within 24 hours.');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+        propertyId: '',
+        viewingTime: ''
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while sending your enquiry. Please try again later.');
+    }
   };
 
   return (
@@ -37,19 +52,19 @@ const Main_Enq = () => {
       </div>
 
       <div className="enquiry-tabs">
-        <button 
+        <button
           className={enquiryType === 'general' ? 'active' : ''}
           onClick={() => setEnquiryType('general')}
         >
           General Inquiry
         </button>
-        <button 
+        <button
           className={enquiryType === 'property' ? 'active' : ''}
           onClick={() => setEnquiryType('property')}
         >
           Property Inquiry
         </button>
-        <button 
+        <button
           className={enquiryType === 'viewing' ? 'active' : ''}
           onClick={() => setEnquiryType('viewing')}
         >
@@ -60,43 +75,43 @@ const Main_Enq = () => {
       <form onSubmit={handleSubmit} className="enquiry-form">
         <div className="form-group">
           <label>Full Name</label>
-          <input 
-            type="text" 
-            name="name" 
+          <input
+            type="text"
+            name="name"
             value={formData.name}
             onChange={handleChange}
-            required 
+            required
           />
         </div>
 
         <div className="form-group">
           <label>Email</label>
-          <input 
-            type="email" 
-            name="email" 
+          <input
+            type="email"
+            name="email"
             value={formData.email}
             onChange={handleChange}
-            required 
+            required
           />
         </div>
 
         <div className="form-group">
           <label>Phone Number</label>
-          <input 
-            type="tel" 
-            name="phone" 
+          <input
+            type="tel"
+            name="phone"
             value={formData.phone}
             onChange={handleChange}
-            required 
+            required
           />
         </div>
 
         {enquiryType === 'property' && (
           <div className="form-group">
             <label>Property ID (if known)</label>
-            <input 
-              type="text" 
-              name="propertyId" 
+            <input
+              type="text"
+              name="propertyId"
               value={formData.propertyId}
               onChange={handleChange}
             />
@@ -106,9 +121,10 @@ const Main_Enq = () => {
         {enquiryType === 'viewing' && (
           <div className="form-group">
             <label>Preferred Viewing Date/Time</label>
-            <input 
-              type="datetime-local" 
-              name="viewingTime" 
+            <input
+              type="datetime-local"
+              name="viewingTime"
+              value={formData.viewingTime}
               onChange={handleChange}
             />
           </div>
@@ -116,8 +132,8 @@ const Main_Enq = () => {
 
         <div className="form-group">
           <label>Your Message</label>
-          <textarea 
-            name="message" 
+          <textarea
+            name="message"
             value={formData.message}
             onChange={handleChange}
             rows="5"
