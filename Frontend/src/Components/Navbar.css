@@ -30,6 +30,8 @@
 
 .nav-links {
   display: flex;
+  justify-content: space-evenly;
+  padding-right: 2rem;
   gap: 2.5rem;
 }
 
@@ -115,3 +117,51 @@
     padding: 0.75rem;
   }
 }
+
+
+/* ========== Submenu Dropdown Styling ========== */
+.nav-item {
+  position: relative;
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.7rem;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  min-width: 120px;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover .submenu {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.submenu a {
+  display: block;
+  padding: 0.75rem 1.25rem;
+  color: #495057;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.submenu a:hover {
+  background: #f8f9fa;
+  color: #ef233c;
+}
+
+
