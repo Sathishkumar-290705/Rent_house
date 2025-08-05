@@ -1,114 +1,126 @@
 /* Main_Home.css */
 
-/* Global container */
-.main-home {
-  font-family: 'Poppins', sans-serif;
-  color: #1F2937;
-  background-color: #F9FAFB;
-  line-height: 1.6;
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
 }
 
-/* ========== Hero Section ========== */
+/* Hero Section */
 .hero-container {
-  position: relative;
-  height: 75vh;
-  background-image: url('src/assets/home-bg.jpg'); /* your static image path */
-  /* C:\Rent_house\Frontend\src\assets\home-bg.jpg */
+  background-image: url('/src/assets/home-bg.jpeg');
   background-size: cover;
   background-position: center;
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   padding: 2rem;
-  border-radius: 12px;
   text-align: center;
-  width: 90%;
-  max-width: 700px;
+  border-radius: 8px;
+  max-width: 600px;
 }
 
 .quote-text {
-  color: #FFFFFF;
-  font-size: 2.25rem; /* 36px */
-  font-weight: 700;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 600;
   margin-bottom: 1.5rem;
 }
 
 /* Search Bar */
 .search-bar {
   display: flex;
-  gap: 1rem;
   justify-content: center;
+  gap: 1rem;
 }
 
 .search-bar input {
-  width: 60%;
   padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 5px;
+  width: 70%;
   font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #D1D5DB;
-  outline: none;
 }
 
 .search-bar button {
   padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: white;
-  background-color: #2563EB;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
+  background-color: #0077ff;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .search-bar button:hover {
-  background-color: #1D4ED8;
+  background-color: #005fcc;
 }
 
-/* ========== About Section ========== */
-.about-section {
-  padding: 4rem 2rem;
-  background-color: #FFFFFF;
-  text-align: center;
-}
-
-.about-section h2 {
-  font-size: 2rem; /* 32px */
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-.about-section p {
-  font-size: 1.125rem; /* 18px */
-  max-width: 800px;
-  margin: 0 auto;
-  color: #4B5563;
-}
-
-/* ========== Results Section ========== */
-.results-section {
-  padding: 3rem 2rem;
-  background-color: #F3F4F6;
-}
-
+/* Results Section */
 .results-section h3 {
-  font-size: 1.75rem; /* 28px */
-  font-weight: 700;
-  margin-bottom: 2rem;
   text-align: center;
+  font-size: 1.75rem;
+  margin-top: 2rem;
+  color: #444;
 }
 
-.result-block {
-  margin-bottom: 2.5rem;
+/* About Section */
+.about-section {
+  background-color: #ffffff;
+  padding: 3rem 2rem;
+  margin-top: 3rem;
 }
 
-.result-block h4 {
-  font-size: 1.5rem; /* 24px */
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #111827;
+.about-section .container {
+  max-width: 900px;
+  margin: auto;
+  align-items: left;
+}
+
+.about-section h1,
+.about-section h2 {
+  color: #0077ff;
+}
+
+.about-section ul {
+  padding-left: 1.5rem;
+}
+
+.about-section ul li {
+  margin-bottom: 0.75rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .hero-container {
+    height: auto;
+    padding: 4rem 1rem;
+    text-align: center;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .search-bar button {
+    width: 100%;
+  }
+
+  .quote-text {
+    font-size: 1.5rem;
+  }
 }
