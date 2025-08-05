@@ -5,6 +5,7 @@ import Main_Lease from './Components/Services/Lease/Main_Lease';
 import Main_Rent from './Components/Services/Rent/Main_Rent';
 import Main_Enq from './Components/Enqiry';
 import Navbar from './Components/Navbar';
+import About_us from './Components/About_us/About_us';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Main_Home/>} />
+        <Route path="/about-us" element={<About_us/>} />
         <Route path="/buy" element={<Main_Buy />} />
         <Route path="/rent" element={<Main_Rent />} />
         <Route path="/lease" element={<Main_Lease />} />
