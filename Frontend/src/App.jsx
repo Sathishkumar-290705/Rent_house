@@ -6,7 +6,7 @@ import Main_Rent from './Components/Services/Rent/Main_Rent';
 import Main_Enq from './Components/Enqiry';
 import Navbar from './Components/Navbar';
 import About_us from './Components/About_us/About_us';
-
+import ScrollToTop from './ScrollToTop';
 function App() {
   return (
     <Router>
@@ -17,9 +17,10 @@ function App() {
         <Route path="/buy" element={<Main_Buy />} />
         <Route path="/rent" element={<Main_Rent />} />
         <Route path="/lease" element={<Main_Lease />} />
-        <Route path="/Enqiry" element={<Main_Enq />} /> {/* Fallback to home for unmatched routes */}
+        <Route path="/Enquiry" element={<Main_Enq />} /> {/* Fallback to home for unmatched routes */}
         
       </Routes>
+      <ScrollToTop />
     </Router>
   );
 }

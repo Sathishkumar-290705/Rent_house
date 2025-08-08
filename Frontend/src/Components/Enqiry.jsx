@@ -1,143 +1,252 @@
 import React, { useState } from 'react';
-import './Pages.css';
+import { useNavigate } from 'react-router-dom';
+import './Enquiry.css';
 
-const Main_Enq = () => {
-  const [enquiryType, setEnquiryType] = useState('general');
+const Enquiry = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    propertyType: '',
     message: '',
-    propertyId: ''
+    preferredContact: 'email'
   });
+
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const propertyTypes = [
+    'Residential - Apartment',
+    'Residential - House',
+    'Commercial - Office',
+    'Commercial - Retail',
+    'Land/Plot',
+    'Other'
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: null
+      });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^[0-9]{10,15}$/.test(formData.phone)) {
+      newErrors.phone = 'Please enter a valid phone number';
+    }
+    if (!formData.propertyType) newErrors.propertyType = 'Please select a property type';
+    if (!formData.message.trim()) newErrors.message = 'Please enter your enquiry';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    alert('Thank you for your enquiry! We will respond within 24 hours.');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: '',
-      propertyId: ''
-    });
+    
+    if (validateForm()) {
+      setIsSubmitting(true);
+      
+      // Simulate API call
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        console.log('Form submitted:', formData);
+        setSubmitSuccess(true);
+        
+        // Reset form after successful submission
+        setTimeout(() => {
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            propertyType: '',
+            message: '',
+            preferredContact: 'email'
+          });
+          setSubmitSuccess(false);
+        }, 3000);
+      } catch (error) {
+        console.error('Submission error:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
   };
 
   return (
-    <div className="page-container enquiry-container">
-      <div className="enquiry-header">
-        <h2>Contact Us</h2>
-        <p>Have questions? Our team is ready to help with any inquiries about our properties or services.</p>
-      </div>
-
-      <div className="enquiry-tabs">
-        <button 
-          className={enquiryType === 'general' ? 'active' : ''}
-          onClick={() => setEnquiryType('general')}
-        >
-          General Inquiry
-        </button>
-        <button 
-          className={enquiryType === 'property' ? 'active' : ''}
-          onClick={() => setEnquiryType('property')}
-        >
-          Property Inquiry
-        </button>
-        <button 
-          className={enquiryType === 'viewing' ? 'active' : ''}
-          onClick={() => setEnquiryType('viewing')}
-        >
-          Schedule Viewing
-        </button>
-      </div>
-
-      <form onSubmit={handleSubmit} className="enquiry-form">
-        <div className="form-group">
-          <label>Full Name</label>
-          <input 
-            type="text" 
-            name="name" 
-            value={formData.name}
-            onChange={handleChange}
-            required 
-          />
+    <div className="enquiry-page">
+      <div className="enquiry-container">
+        <div className="enquiry-header">
+          <h1>Property Enquiry</h1>
+          <p>Fill out the form below and our team will get back to you within 24 hours</p>
         </div>
 
-        <div className="form-group">
-          <label>Email</label>
-          <input 
-            type="email" 
-            name="email" 
-            value={formData.email}
-            onChange={handleChange}
-            required 
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Phone Number</label>
-          <input 
-            type="tel" 
-            name="phone" 
-            value={formData.phone}
-            onChange={handleChange}
-            required 
-          />
-        </div>
-
-        {enquiryType === 'property' && (
-          <div className="form-group">
-            <label>Property ID (if known)</label>
-            <input 
-              type="text" 
-              name="propertyId" 
-              value={formData.propertyId}
-              onChange={handleChange}
-            />
+        {submitSuccess && (
+          <div className="success-message">
+            <div className="success-icon">✓</div>
+            <h3>Thank you for your enquiry!</h3>
+            <p>We've received your message and will contact you shortly.</p>
           </div>
         )}
 
-        {enquiryType === 'viewing' && (
-          <div className="form-group">
-            <label>Preferred Viewing Date/Time</label>
-            <input 
-              type="datetime-local" 
-              name="viewingTime" 
-              onChange={handleChange}
-            />
-          </div>
+        {!submitSuccess && (
+          <form onSubmit={handleSubmit} className="enquiry-form">
+            <div className="form-group">
+              <label htmlFor="name">Full Name*</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className={errors.name ? 'error' : ''}
+                placeholder="John Doe"
+              />
+              {errors.name && <span className="error-message">{errors.name}</span>}
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="email">Email Address*</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={errors.email ? 'error' : ''}
+                  placeholder="john@example.com"
+                />
+                {errors.email && <span className="error-message">{errors.email}</span>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="phone">Phone Number*</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className={errors.phone ? 'error' : ''}
+                  placeholder="1234567890"
+                />
+                {errors.phone && <span className="error-message">{errors.phone}</span>}
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="propertyType">Property Type*</label>
+              <select
+                id="propertyType"
+                name="propertyType"
+                value={formData.propertyType}
+                onChange={handleChange}
+                className={errors.propertyType ? 'error' : ''}
+              >
+                <option value="">Select property type</option>
+                {propertyTypes.map((type) => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+              {errors.propertyType && <span className="error-message">{errors.propertyType}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="message">Your Enquiry*</label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                className={errors.message ? 'error' : ''}
+                placeholder="Tell us about the property you're interested in..."
+                rows="5"
+              ></textarea>
+              {errors.message && <span className="error-message">{errors.message}</span>}
+            </div>
+
+            <div className="form-group">
+              <label>Preferred Contact Method</label>
+              <div className="radio-group">
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="preferredContact"
+                    value="email"
+                    checked={formData.preferredContact === 'email'}
+                    onChange={handleChange}
+                  />
+                  <span className="radio-custom"></span>
+                  Email
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="preferredContact"
+                    value="phone"
+                    checked={formData.preferredContact === 'phone'}
+                    onChange={handleChange}
+                  />
+                  <span className="radio-custom"></span>
+                  Phone Call
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="preferredContact"
+                    value="whatsapp"
+                    checked={formData.preferredContact === 'whatsapp'}
+                    onChange={handleChange}
+                  />
+                  <span className="radio-custom"></span>
+                  WhatsApp
+                </label>
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button
+                type="submit"
+                className="submit-btn"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Sending...' : 'Submit Enquiry'}
+              </button>
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={() => navigate('/')}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         )}
-
-        <div className="form-group">
-          <label>Your Message</label>
-          <textarea 
-            name="message" 
-            value={formData.message}
-            onChange={handleChange}
-            rows="5"
-            required
-          />
-        </div>
-
-        <button type="submit" className="submit-btn">
-          {enquiryType === 'viewing' ? 'Request Viewing' : 'Submit Enquiry'}
-        </button>
-      </form>
-
-      <div className="contact-info">
-        <h3>Other Ways to Reach Us</h3>
-        <p><strong>Phone:</strong> (555) 123-4567</p>
-        <p><strong>Email:</strong> enquiries@dsphomerental.com</p>
-        <p><strong>Office Hours:</strong> Mon-Fri 9am-5pm, Sat 10am-2pm</p>
       </div>
     </div>
   );
 };
 
-export default Main_Enq;
+export default Enquiry;
